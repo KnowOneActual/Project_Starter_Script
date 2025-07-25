@@ -1,2 +1,69 @@
-# Project_Starter_Script
-A friendly and powerful bash script to automate the setup of new github projects.
+# Project Starter Script 🚀
+![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg) ![License](https://img.shields.io/badge/License-MIT-green.svg) ![Maintained](https://img.shields.io/badge/Maintained%3F-Yes-brightgreen.svg)
+
+A friendly and powerful bash script to automate the setup of new software projects. This tool creates a clean directory structure, generates standard boilerplate files, and helps you push your new project to GitHub, all from your command line.
+
+Stop the repetitive busywork and start every new project with a consistent, professional foundation.
+
+
+### Features
+
+
+
+* **Standard Directory Structure**: Creates a clean project layout with src, docs, and tests folders.
+* **Git Initialization**: Automatically initializes a Git repository and sets the default branch to main.
+* **Boilerplate Files**: Generates essential files, including:
+    * A README.md with your project title.
+    * A LICENSE file with the MIT License.
+    * A .gitignore file tailored to your chosen language (via Toptal's gitignore.io).
+    * A .editorconfig for consistent coding styles.
+* **Language-Specific Setup**: Provides extra setup for common languages:
+    * **Python**: Creates a venv virtual environment.
+    * **Node.js**: Initializes a package.json file.
+* **GPG Signing**: Prompts to sign the initial commit with your GPG key for added security.
+* **GitHub Integration**: Guides you through pushing your new project to GitHub, with optional support for the GitHub CLI (gh).
+
+
+### Prerequisites
+
+Before you begin, make sure you have the following tools installed on your system:
+
+
+
+* **Bash**: Should be available on any macOS or Linux system.
+* **Git**: For version control.
+* **cURL**: To fetch the .gitignore file from the API.
+* **GPG** (Optional): If you want to sign your commits.
+* **GitHub CLI (gh)** (Optional): For the automated repository creation feature. To use this feature, you only need to run gh auth login one time to authenticate.
+
+```bash
+gh auth login
+```
+
+
+### How to Use
+
+
+
+1. Download the Script
+Save the script to a convenient location on your computer. For example, you can save it as start-project.sh in your home directory or a dedicated ~/scripts folder.
+2. Make it Executable
+Open your terminal and run the following command to give the script permission to execute:
+
+```bash
+chmod +x start-project.sh
+```
+
+3. Run the Script:
+Whenever you want to start a new project, just run the script from your terminal (Don't forget the period at the beginning):
+
+```bash
+./start-project.sh
+```
+
+The script will then guide you through the setup process, asking for the project name, primary language, and other preferences.
+
+
+### License
+
+This project is licensed under the MIT License. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for details.
