@@ -1,18 +1,37 @@
 #!/bin/bash
 
 # A script to automate creating a new project, signing the first commit with GPG, and pushing it to GitHub.
-
 # --- Functions ---
 
-# Function to create a .gitignore file from gitignore.io
+# Updated function to handle a custom HTML gitignore or fetch from the API.
 create_gitignore() {
-    local lang=$1
-    echo "Creating a .gitignore for $lang..."
-    if curl -sL "https://www.toptal.com/developers/gitignore/api/$lang" -o ".gitignore"; then
-        echo "✅ .gitignore created successfully."
+    local lang=$(echo "$1" | tr '[:upper:]' '[:lower:]') # Standardize to lowercase
+
+    # Check for the user's special case: "html"
+    if [ "$lang" == "html" ]; then
+        echo "🔽 Using your custom HTML .gitignore boilerplate..."
+        if curl -sL "https://raw.githubusercontent.com/KnowOneActual/start-work-script/refs/heads/main/.gitignore" -o ".gitignore"; then
+            echo "✅ Custom .gitignore created successfully."
+        else
+            echo "⚠️  Warning: Could not fetch your custom .gitignore. A blank file was created."
+            touch .gitignore
+        fi
+    # For all other languages, use the API
     else
-        echo "⚠️  Warning: Could not fetch .gitignore. A blank file was created."
-        touch .gitignore
+        echo "Creating a .gitignore for $lang via API..."
+        if curl -sL "https://www.toptal.com/developers/gitignore/api/$lang" -o ".gitignore"; then
+            # Check if the API returned an error
+            if grep -q "ERROR:" ".gitignore"; then
+                 echo "⚠️  Warning: The API does not have a template for '$lang'. A blank file was created."
+                 # Clear the file of the error message
+                 > .gitignore
+            else
+                 echo "✅ .gitignore created successfully."
+            fi
+        else
+            echo "⚠️  Warning: Could not fetch .gitignore from API. A blank file was created."
+            touch .gitignore
+        fi
     fi
 }
 
@@ -37,10 +56,14 @@ git init -b main
 echo "📂 Creating core directories and files..."
 mkdir src
 touch src/main # Placeholder, will be renamed later
-
-# README, LICENSE, .editorconfig (code omitted for brevity, but it's the same as before)
 echo "# $project_name" > README.md
-# ... (rest of the file creation logic) ...
+# (Assuming LICENSE and .editorconfig creation logic is here)
+
+# --- Download Supporting Scripts ---
+echo "🔽 Downloading start-work.sh script..."
+curl -o start-work.sh https://raw.githubusercontent.com/KnowOneActual/start-work-script/refs/heads/main/start-work.sh
+chmod +x start-work.sh
+echo "✅ start-work.sh is ready to use."
 
 # --- Optional Directories ---
 read -p "Add a 'docs' directory? (y/n): " add_docs
@@ -55,17 +78,16 @@ if [[ "$add_tests" =~ ^[Yy]$ ]]; then
 fi
 
 # --- Language-Specific Setup ---
-read -p "Enter the primary language (e.g., python, node, go): " language
+read -p "Enter the primary language (e.g., python, node, go, html): " language
 create_gitignore "$language"
 
 # Rename main file and perform language-specific tasks
-# ... (language-specific logic is the same as before) ...
+# (Assuming language-specific logic is here)
 
-# --- GPG Signing Setup (New Section) ---
+# --- GPG Signing Setup ---
 commit_flags="-m 'Initial commit: project structure setup'"
 read -p "Sign this commit with a GPG key? (y/n): " use_gpg
 if [[ "$use_gpg" =~ ^[Yy]$ ]]; then
-    # Check if a signing key is already configured
     signing_key=$(git config user.signingkey)
     if [ -z "$signing_key" ]; then
         echo "No default GPG key found in your Git config."
@@ -90,7 +112,6 @@ echo "--------------------------------------------------"
 # --- GitHub Push Guide ---
 read -p "Would you like to push this project to GitHub now? (y/n): " push_to_github
 if [[ "$push_to_github" =~ ^[Yy]$ ]]; then
-    # Check for GitHub CLI
     if command -v gh &> /dev/null; then
         echo "GitHub CLI detected."
         read -p "Create a new public repository named '$project_name'? (y/n): " create_repo
@@ -110,6 +131,3 @@ if [[ "$push_to_github" =~ ^[Yy]$ ]]; then
         fi
     fi
 fi
-
-# --- Open in VS Code (Optional) ---
-# ... (VS Code logic is the same as before) ...
