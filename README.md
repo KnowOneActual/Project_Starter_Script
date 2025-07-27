@@ -73,9 +73,9 @@ The `start-project.sh` script automatically includes a handy `start-work.sh` scr
 
 It will ask for a branch name, sync your `main` branch with the remote, and then create and switch to the new feature branch for you.
 
-### License
+## **License**
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the Unlicense License.
 
-```
-```
+For more information, please refer to [Unlicense](https://unlicense.org)
+
