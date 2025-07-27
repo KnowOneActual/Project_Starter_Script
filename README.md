@@ -1,5 +1,5 @@
-# Project Starter Script 🚀
 
+# Project Starter Script 🚀
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Yes-brightgreen.svg)
@@ -13,11 +13,16 @@ Stop the repetitive busywork and start every new project with a consistent, prof
 
 * **Standard Directory Structure**: Creates a clean project layout with `src`, `docs`, and `tests` folders.
 * **Git Initialization**: Automatically initializes a Git repository and sets the default branch to `main`.
-* **Boilerplate Files**: Generates essential files, including:
+* **Flexible .gitignore**: Gives you the choice between:
+    * Using your own [custom boilerplate .gitignore](https://github.com/KnowOneActual/gitignore-boilerplate).
+    * Fetching a language-specific file from the gitignore.io API.
+* **Automatic Boilerplate Files**: Generates essential starter files by pulling them from a central repository, including:
     * A `README.md` with your project title.
     * A `LICENSE` file with the MIT License.
-    * A `.gitignore` file tailored to your chosen language (via Toptal's gitignore.io), with support for a custom boilerplate file.
     * An `.editorconfig` for consistent coding styles.
+    * A `CONTRIBUTING.md` to guide potential contributors.
+    * A `CHANGELOG.md` to track project changes.
+* **GitHub Templates**: Sets up modern GitHub issue templates for `Bug Reports` and `Feature Requests` inside a `.github` directory.
 * **Workflow Automation**: Automatically downloads a companion `start-work.sh` script to help manage your Git branching workflow.
 * **Language-Specific Setup**: Provides extra setup for common languages:
     * **Python**: Creates a `venv` virtual environment.
@@ -32,7 +37,7 @@ Before you begin, make sure you have the following tools installed on your syste
 
 * **Bash**: Should be available on any macOS or Linux system.
 * **Git**: For version control.
-* **cURL**: To fetch the `.gitignore` file from the API.
+* **cURL**: To fetch boilerplate files from GitHub and APIs.
 * **GPG** (Optional): If you want to sign your commits.
 * **GitHub CLI (gh)** (Optional): For the automated repository creation feature. To use this feature, you only need to run `gh auth login` one time to authenticate.
 
@@ -55,7 +60,7 @@ gh auth login
     ./start-project.sh
     ```
 
-The script will then guide you through the setup process, asking for the project name, primary language, and other preferences.
+The script will then guide you through the setup process, asking for the project name, `.gitignore` preference, and other details.
 
 ### Using the `start-work.sh` Script
 
@@ -73,7 +78,7 @@ The `start-project.sh` script automatically includes a handy `start-work.sh` scr
 
 It will ask for a branch name, sync your `main` branch with the remote, and then create and switch to the new feature branch for you.
 
-## **License**
+### License
 
 This project is licensed under the Unlicense License.
 
