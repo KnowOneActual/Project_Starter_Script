@@ -1,14 +1,19 @@
 #!/bin/bash
 
-# A script to automate creating a new project, signing the first commit with GPG, and pushing it to GitHub.
+# =================================================================================
+# Project Starter Script 🚀
+# Automates the setup of new software projects, including directory structure,
+# boilerplate files, Git initialization, and pushing to GitHub.
+# =================================================================================
+
+
 # --- Functions ---
 
-# Updated function to handle a custom HTML gitignore or fetch from the API.
 create_gitignore() {
     echo "--------------------------------------------------"
     echo "Select a .gitignore option:"
-    echo "  1) Use a standard boilerplate (from gitignore-boilerplate repo)"
-    echo "  2) Fetch a language-specific .gitignore from the API"
+    echo "  1) Use my standard boilerplate (from gitignore-boilerplate repo)"
+    echo "  2) Fetch a language-specific .gitignore from an API"
     read -p "Enter your choice (1 or 2): " gitignore_choice
 
     if [ "$gitignore_choice" == "1" ]; then
@@ -36,12 +41,18 @@ create_gitignore() {
     fi
 }
 
+
 # --- Main Script ---
 
-# Ask for the project name
+clear
+echo "=================================================="
+echo "🚀 Welcome to the Project Starter Script"
+echo "=================================================="
+
+# 1. Get Project Name
 read -p "Enter your project name: " project_name
 
-# Create the main project directory and navigate into it
+# 2. Create Project Directory
 mkdir "$project_name"
 cd "$project_name"
 
@@ -49,48 +60,69 @@ echo "--------------------------------------------------"
 echo "🚀 Creating project: $project_name"
 echo "--------------------------------------------------"
 
-# --- Git Initialization ---
+# 3. Initialize Git
 echo "🌿 Initializing Git repository with 'main' branch..."
 git init -b main
 
-# --- Directory and File Creation ---
-echo "📂 Creating core directories and standard files..."
-mkdir src
-touch src/main # Placeholder, will be renamed later
+# 4. Create Core Directories
+echo "📂 Creating core directories (src, docs, tests)..."
+mkdir src docs tests
+touch src/main # Placeholder file
+touch docs/index.md
+
+# 5. Download Standard Boilerplate Files
+echo "🔽 Downloading standard boilerplate files..."
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.editorconfig" -o ".editorconfig"
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CONTRIBUTING.md" -o "CONTRIBUTING.md"
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CHANGELOG.md" -o "CHANGELOG.md"
+
+# 6. Create README and LICENSE
 echo "# $project_name" > README.md
+echo "MIT License - see the LICENSE file for details." >> README.md
+# A simple MIT License file
+{
+    echo "MIT License"
+    echo ""
+    echo "Copyright (c) $(date +%Y) $(git config user.name)"
+    echo ""
+    echo "Permission is hereby granted, free of charge, to any person obtaining a copy"
+    echo "of this software and associated documentation files (the \"Software\"), to deal"
+    echo "in the Software without restriction, including without limitation the rights"
+    echo "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell"
+    echo "copies of the Software, and to permit persons to whom the Software is"
+    echo "furnished to do so, subject to the following conditions:"
+    echo ""
+    echo "The above copyright notice and this permission notice shall be included in all"
+    echo "copies or substantial portions of the Software."
+    echo ""
+    echo "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR"
+    echo "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,"
+    echo "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE"
+    echo "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER"
+    echo "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,"
+    echo "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE"
+    echo "SOFTWARE."
+} > LICENSE
 
-# --- Download Standard Repository Files ---
-echo "🔽 Downloading .editorconfig..."
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/refs/heads/main/.editorconfig" -o ".editorconfig"
+# 7. Download GitHub Issue Templates
+echo "🔽 Creating GitHub issue templates..."
+mkdir -p .github/ISSUE_TEMPLATE
+# You will need to create these files in your Project_Starter_Script repository first
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/bug_report.md" -o ".github/ISSUE_TEMPLATE/bug_report.md"
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/feature_request.md" -o ".github/ISSUE_TEMPLATE/feature_request.md"
 
-echo "🔽 Downloading CONTRIBUTING.md..."
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/refs/heads/main/CONTRIBUTING.md" -o "CONTRIBUTING.md"
-
-# --- Download Supporting Scripts ---
-echo "🔽 Downloading start-work.sh script..."
-curl -sL -o start-work.sh https://raw.githubusercontent.com/KnowOneActual/start-work-script/refs/heads/main/start-work.sh
+# 8. Download Supporting Scripts
+echo "🔽 Downloading supporting scripts (start-work.sh)..."
+curl -sL -o start-work.sh https://raw.githubusercontent.com/KnowOneActual/start-work-script/main/start-work.sh
 chmod +x start-work.sh
 echo "✅ Standard files and scripts are ready."
 
-
-# --- Optional Directories ---
-read -p "Add a 'docs' directory? (y/n): " add_docs
-if [[ "$add_docs" =~ ^[Yy]$ ]]; then
-    mkdir docs
-    touch docs/index.md
-fi
-
-read -p "Add a 'tests' directory? (y/n): " add_tests
-if [[ "$add_tests" =~ ^[Yy]$ ]]; then
-    mkdir tests
-fi
-
-# --- Language-Specific Setup ---
+# 9. Get .gitignore
 create_gitignore
 
-# (Assuming language-specific logic for renaming main file, etc. is here)
+# (Placeholder for additional language-specific logic, like creating a Python venv)
 
-# --- GPG Signing Setup ---
+# 10. GPG Signing
 commit_flags="-m 'Initial commit: project structure setup'"
 read -p "Sign this commit with a GPG key? (y/n): " use_gpg
 if [[ "$use_gpg" =~ ^[Yy]$ ]]; then
@@ -106,7 +138,7 @@ if [[ "$use_gpg" =~ ^[Yy]$ ]]; then
     echo "✅ Commits will be signed."
 fi
 
-# --- Final Local Git Commit ---
+# 11. Final Local Commit
 echo "💾 Saving initial project state..."
 git add .
 eval "git commit $commit_flags"
@@ -115,7 +147,7 @@ echo "--------------------------------------------------"
 echo "✅ Local project '$project_name' is ready!"
 echo "--------------------------------------------------"
 
-# --- GitHub Push Guide ---
+# 12. GitHub Push Guide
 read -p "Would you like to push this project to GitHub now? (y/n): " push_to_github
 if [[ "$push_to_github" =~ ^[Yy]$ ]]; then
     if command -v gh &> /dev/null; then
@@ -137,3 +169,7 @@ if [[ "$push_to_github" =~ ^[Yy]$ ]]; then
         fi
     fi
 fi
+
+echo "=================================================="
+echo "Happy coding!"
+echo "=================================================="
