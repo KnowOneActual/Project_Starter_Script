@@ -1,7 +1,6 @@
 # Project Starter Script 🚀
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
-![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg) 
-![License](https://img.shields.io/badge/License-MIT-green.svg) 
+![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)  
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Yes-brightgreen.svg)
 
 A friendly and powerful bash script to automate the setup of new software projects. This tool creates a clean directory structure, generates standard boilerplate files, and helps you push your new project to GitHub, all from your command line.
