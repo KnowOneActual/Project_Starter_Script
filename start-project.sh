@@ -6,6 +6,14 @@
 # boilerplate files, Git initialization, and pushing to GitHub.
 # =================================================================================
 
+# --- Safeguard ---
+# Prevent the script from running in the home directory.
+if [ "$PWD" == "$HOME" ]; then
+    echo "❌ Error: Running this script in the home directory is not allowed."
+    echo "Please run it from a dedicated projects or development directory."
+    exit 1
+fi
+
 
 # --- Functions ---
 
