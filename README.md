@@ -4,6 +4,8 @@
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Yep-brightgreen.svg)
 
+!! The instructions are currently being developed; apologies if they are unclear. 
+
 A friendly and powerful bash script to automate the setup of new software projects. This tool creates a clean directory structure, generates standard boilerplate files, and helps you push your new project to GitHub, all from your command line.
 
 Stop the repetitive busywork and start every new project with a consistent, professional foundation.
