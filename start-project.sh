@@ -83,6 +83,8 @@ echo "🔽 Downloading standard boilerplate files..."
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.editorconfig" -o ".editorconfig"
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CONTRIBUTING.md" -o "CONTRIBUTING.md"
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CHANGELOG.md" -o "CHANGELOG.md"
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.prettierrc" -o ".prettierrc"
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.prettierignore" -o ".prettierignore" -o
 
 # 6. Create README and LICENSE
 echo "# $project_name" > README.md
@@ -118,6 +120,7 @@ mkdir -p .github/ISSUE_TEMPLATE
 # You will need to create these files in your Project_Starter_Script repository first
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/bug_report.md" -o ".github/ISSUE_TEMPLATE/bug_report.md"
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/feature_request.md" -o ".github/ISSUE_TEMPLATE/feature_request.md"
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/PULL_REQUEST_TEMPLATE.md" -o ".github/PULL_REQUEST_TEMPLATE.md"
 
 # 8. Download Supporting Scripts
 echo "🔽 Downloading supporting scripts (start-work.sh)..."
