@@ -14,8 +14,14 @@ if [ "$PWD" == "$HOME" ]; then
     exit 1
 fi
 
-
 # --- Functions ---
+
+download_file() {
+    local url=$1
+    local output=$2
+    echo "   Downloading $output..."
+    curl -sL "$url" -o "$output"
+}
 
 create_gitignore() {
     echo "--------------------------------------------------"
@@ -26,7 +32,7 @@ create_gitignore() {
 
     if [ "$gitignore_choice" == "1" ]; then
         echo "🔽 Downloading your standard .gitignore boilerplate..."
-        if curl -sL "https://raw.githubusercontent.com/KnowOneActual/gitignore-boilerplate/main/.gitignore" -o ".gitignore"; then
+        if download_file "https://raw.githubusercontent.com/KnowOneActual/gitignore-boilerplate/main/.gitignore" ".gitignore"; then
             echo "✅ Custom .gitignore created successfully."
         else
             echo "⚠️  Warning: Could not fetch your custom .gitignore. A blank file was created."
@@ -35,7 +41,7 @@ create_gitignore() {
     else
         read -p "Enter the primary language for the .gitignore API (e.g., python, node, go): " lang
         echo "Creating a .gitignore for $lang via API..."
-        if curl -sL "https://www.toptal.com/developers/gitignore/api/$lang" -o ".gitignore"; then
+        if download_file "https://www.toptal.com/developers/gitignore/api/$lang" ".gitignore"; then
             if grep -q "ERROR:" ".gitignore"; then
                  echo "⚠️  Warning: The API does not have a template for '$lang'. A blank file was created."
                  > .gitignore
@@ -49,7 +55,6 @@ create_gitignore() {
     fi
 }
 
-
 # --- Main Script ---
 
 clear
@@ -57,20 +62,48 @@ echo "=================================================="
 echo "🚀 Welcome to the Project Starter Script"
 echo "=================================================="
 
-# 1. Get Project Name
-read -p "Enter your project name: " project_name
+# 1. Get Project Name (Argument or Prompt)
+if [ -n "$1" ]; then
+    project_name="$1"
+    echo "Targeting project: $project_name"
+else
+    read -p "Enter your project name: " project_name
+fi
 
-# 2. Create Project Directory
-mkdir "$project_name"
-cd "$project_name"
+# Validate input (No spaces allowed)
+if [[ "$project_name" =~ [[:space:]] ]]; then
+    echo "❌ Error: Project names cannot contain spaces. Use hyphens or underscores."
+    exit 1
+fi
+
+# 2. Create Project Directory (With Safety Check)
+if [ -d "$project_name" ]; then
+    echo "❌ Error: Directory '$project_name' already exists."
+    read -p "Do you want to overwrite it? (DANGEROUS - existing files may be lost) (y/n): " confirm_overwrite
+    if [[ "$confirm_overwrite" != "y" ]]; then
+        echo "Aborting."
+        exit 1
+    fi
+else
+    mkdir "$project_name"
+fi
+
+cd "$project_name" || exit
 
 echo "--------------------------------------------------"
 echo "🚀 Creating project: $project_name"
 echo "--------------------------------------------------"
 
 # 3. Initialize Git
-echo "🌿 Initializing Git repository with 'main' branch..."
-git init -b main
+echo "🌿 Initializing Git repository..."
+# Check if git init supports -b (Git 2.28+)
+if git init -b main >/dev/null 2>&1; then
+    echo "   Initialized with branch 'main'."
+else
+    git init
+    git checkout -b main 2>/dev/null || git symbolic-ref HEAD refs/heads/main
+    echo "   Initialized (legacy mode)."
+fi
 
 # 4. Create Core Directories
 echo "📂 Creating core directories (src, docs, tests)..."
@@ -80,16 +113,18 @@ touch docs/index.md
 
 # 5. Download Standard Boilerplate Files
 echo "🔽 Downloading standard boilerplate files..."
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.editorconfig" -o ".editorconfig"
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CONTRIBUTING.md" -o "CONTRIBUTING.md"
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CHANGELOG.md" -o "CHANGELOG.md"
-# Prettier configuration
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.prettierrc" -o ".prettierrc"
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.prettierignore" -o ".prettierignore"
+BASE_URL="https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main"
+
+download_file "$BASE_URL/.editorconfig" ".editorconfig"
+download_file "$BASE_URL/CONTRIBUTING.md" "CONTRIBUTING.md"
+download_file "$BASE_URL/CHANGELOG.md" "CHANGELOG.md"
+download_file "$BASE_URL/.prettierrc" ".prettierrc"
+download_file "$BASE_URL/.prettierignore" ".prettierignore"
 
 # 6. Create README and LICENSE
 echo "# $project_name" > README.md
 echo "MIT License - see the LICENSE file for details." >> README.md
+
 # A simple MIT License file
 {
     echo "MIT License"
@@ -118,21 +153,18 @@ echo "MIT License - see the LICENSE file for details." >> README.md
 # 7. Download GitHub Issue Templates
 echo "🔽 Creating GitHub issue templates..."
 mkdir -p .github/ISSUE_TEMPLATE
-# You will need to create these files in your Project_Starter_Script repository first
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/bug_report.md" -o ".github/ISSUE_TEMPLATE/bug_report.md"
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/feature_request.md" -o ".github/ISSUE_TEMPLATE/feature_request.md"
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.github/ISSUE_TEMPLATE/PULL_REQUEST_TEMPLATE.md" -o ".github/PULL_REQUEST_TEMPLATE.md"
+download_file "$BASE_URL/.github/ISSUE_TEMPLATE/bug_report.md" ".github/ISSUE_TEMPLATE/bug_report.md"
+download_file "$BASE_URL/.github/ISSUE_TEMPLATE/feature_request.md" ".github/ISSUE_TEMPLATE/feature_request.md"
+download_file "$BASE_URL/.github/PULL_REQUEST_TEMPLATE.md" ".github/PULL_REQUEST_TEMPLATE.md"
 
 # 8. Download Supporting Scripts
 echo "🔽 Downloading supporting scripts (start-work.sh)..."
-curl -sL -o start-work.sh https://raw.githubusercontent.com/KnowOneActual/start-work-script/main/start-work.sh
+download_file "https://raw.githubusercontent.com/KnowOneActual/start-work-script/main/start-work.sh" "start-work.sh"
 chmod +x start-work.sh
 echo "✅ Standard files and scripts are ready."
 
 # 9. Get .gitignore
 create_gitignore
-
-# (Placeholder for additional language-specific logic, like creating a Python venv)
 
 # 10. GPG Signing
 commit_flags="-m 'Initial commit: project structure setup'"
