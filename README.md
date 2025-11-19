@@ -1,14 +1,11 @@
-
 # Project Starter Script 🚀
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Yep-brightgreen.svg)
 
-!! The instructions are currently being developed; apologies if they are unclear. 
+A friendly bash script to automate the setup of new projects for GitHub. This tool creates a clean directory structure, generates standard boilerplate files, and helps you push your new project to GitHub, all from your command line.
 
-A friendly and powerful bash script to automate the setup of new software projects. This tool creates a clean directory structure, generates standard boilerplate files, and helps you push your new project to GitHub, all from your command line.
-
-Stop the repetitive busywork and start every new project with a consistent, professional foundation.
+Stop the repetitive busywork and start every new project with a consistent foundation.
 
 
 ### Features
@@ -51,18 +48,28 @@ gh auth login
 
 1.  **Download the Script**
     Save the script to a convenient location on your computer. For example, you can save it as `start-project.sh` in your home directory or a dedicated `~/scripts` folder.
+
 2.  **Make it Executable**
     Open your terminal and run the following command to give the script permission to execute:
+
     ```bash
     chmod +x start-project.sh
     ```
+
 3.  **Run the Script**
     Whenever you want to start a new project, just run the script from your terminal:
+
     ```bash
     ./start-project.sh
     ```
 
-The script will then guide you through the setup process, asking for the project name, `.gitignore` preference, and other details.
+    Alternatively, you can pass the project name directly to skip the first prompt:
+
+    ```bash
+    ./start-project.sh my-new-app
+    ```
+
+The script will then guide you through the setup process, asking for the `.gitignore` preference and other details.
 
 ### Using the `start-work.sh` Script
 
@@ -85,4 +92,3 @@ It will ask for a branch name, sync your `main` branch with the remote, and then
 This project is licensed under the Unlicense License.
 
 For more information, please refer to [Unlicense](https://unlicense.org)
-
