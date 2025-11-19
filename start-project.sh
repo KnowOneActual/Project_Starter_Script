@@ -83,8 +83,9 @@ echo "🔽 Downloading standard boilerplate files..."
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.editorconfig" -o ".editorconfig"
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CONTRIBUTING.md" -o "CONTRIBUTING.md"
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/CHANGELOG.md" -o "CHANGELOG.md"
+# Prettier configuration
 curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.prettierrc" -o ".prettierrc"
-curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.prettierignore" -o ".prettierignore" -o
+curl -sL "https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main/.prettierignore" -o ".prettierignore"
 
 # 6. Create README and LICENSE
 echo "# $project_name" > README.md

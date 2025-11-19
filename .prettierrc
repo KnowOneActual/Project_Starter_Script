@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "arrowParens": "always",
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "css",
@@ -15,14 +14,4 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "useTabs": false
-=======
-"semi": true,
-"singleQuote": true,
-"tabWidth": 4,
-"trailingComma": "es5",
-"printWidth": 100,
-"jsxSingleQuote": true,
-"bracketSpacing": true,
-"arrowParens": "always"
->>>>>>> 75faad2a95aeafab8b61c0e11a43b43ef223ade4
 }
