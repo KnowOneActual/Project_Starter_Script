@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0]
+
+### Added
+- **start-project.sh**: Added "Pre-flight Checks" to automatically verify that `git` and `curl` are installed before running.
+- **start-project.sh**: Added automatic environment setup for Python (creates `.venv` and `requirements.txt`) and Node.js (initializes `package.json` and `.nvmrc`).
+- **start-project.sh**: Added CI/CD integration by fetching a default GitHub Actions workflow (`ci.yml`) for new projects.
+- **Templates**: Introduced a `templates/` directory to host generic versions of `CONTRIBUTING.md`, `CHANGELOG.md`, and `ci.yml`.
+
+### Changed
+- **start-project.sh**: Refactored download logic to pull documentation from the new `templates/` directory, ensuring new projects start with a clean history instead of cloning this script's own docs.
+- **start-work.sh**: Updated logic to auto-detect the default branch name (e.g., `main` or `master`) from the remote, removing the hardcoded dependency on `main`.
+
+
 ## [1.0.0]
 
 ### Added

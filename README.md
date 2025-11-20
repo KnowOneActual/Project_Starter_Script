@@ -10,24 +10,16 @@ Stop the repetitive busywork and start every new project with a consistent found
 
 ### Features
 
+### Features
+
 * **Standard Directory Structure**: Creates a clean project layout with `src`, `docs`, and `tests` folders.
-* **Git Initialization**: Automatically initializes a Git repository and sets the default branch to `main`.
-* **Flexible .gitignore**: Gives you the choice between:
-    * Using your own [custom boilerplate .gitignore](https://github.com/KnowOneActual/gitignore-boilerplate).
-    * Fetching a language-specific file from the gitignore.io API.
-* **Automatic Boilerplate Files**: Generates essential starter files by pulling them from a central repository, including:
-    * A `README.md` with your project title.
-    * A `LICENSE` file with the MIT License.
-    * An `.editorconfig` for consistent coding styles.
-    * A `CONTRIBUTING.md` to guide potential contributors.
-    * A `CHANGELOG.md` to track project changes.
-* **GitHub Templates**: Sets up modern GitHub issue templates for `Bug Reports` and `Feature Requests` inside a `.github` directory.
-* **Workflow Automation**: Automatically downloads a companion `start-work.sh` script to help manage your Git branching workflow.
-* **Language-Specific Setup**: Provides extra setup for common languages:
-    * **Python**: Creates a `venv` virtual environment.
-    * **Node.js**: Initializes a `package.json` file.
-* **GPG Signing**: Prompts to sign the initial commit with your GPG key for added security.
-* **GitHub Integration**: Guides you through pushing your new project to GitHub, with optional support for the GitHub CLI (`gh`).
+* **Smart Language Setup**: Automatically detects and configures your environment:
+    * **Python**: Creates a `.venv`, upgrades pip, and adds a `requirements.txt`.
+    * **Node.js**: Initializes `package.json` and creates an `.nvmrc`.
+* **CI/CD Ready**: Installs a default GitHub Action (`ci.yml`) so your project is ready for automated testing immediately.
+* **Git & GitHub Automation**: Initializes Git, safeguards against dirty directories, and offers to create/push the repo to GitHub.
+* **Workflow Tools**: Includes a companion `start-work.sh` script for standardized branching (Feature/Bugfix/Hotfix).
+* **Standard Boilerplate**: Fetches essential files (`README`, `LICENSE`, `CONTRIBUTING`, `CHANGELOG`) from a central template repository.
 
 
 ### Prerequisites

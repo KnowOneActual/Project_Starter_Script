@@ -1,17 +1,24 @@
 #!/bin/bash
 
 # --- Git Workflow Starter ---
-# This script automates the process of starting a new task.
-# 1. Checks for uncommitted changes (and offers to stash them).
+# 1. Checks for uncommitted changes.
 # 2. Asks for a branch type and name.
-# 3. Syncs the main branch.
+# 3. Syncs the main branch (Auto-detected).
 # 4. Creates and switches to the new branch.
 
-# Set the default main branch name.
-MAIN_BRANCH="main"
+# --- Step 0: Auto-detect Main Branch ---
+# Attempts to find the default branch name (main, master, etc.)
+MAIN_BRANCH=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | cut -d' ' -f5)
+
+# Fallback if offline or detection fails
+if [ -z "$MAIN_BRANCH" ]; then
+    MAIN_BRANCH="main"
+fi
+
+echo "🔄 Target Main Branch: $MAIN_BRANCH"
 
 # --- Step 1: Check for a clean working directory ---
-echo "🔄 Preparing your workspace..."
+echo "Checking workspace status..."
 if [ -n "$(git status --porcelain)" ]; then
     echo "⚠️  Your working directory is not clean."
     read -p "Would you like to stash these changes and continue? (y/n): " stash_choice
@@ -23,7 +30,7 @@ if [ -n "$(git status --porcelain)" ]; then
         exit 1
     fi
 else
-    echo "✅ Your workspace is clean."
+    echo "✅ Workspace is clean."
 fi
 echo ""
 
@@ -45,7 +52,6 @@ esac
 echo "Enter the name for your new branch (e.g., add-user-login):"
 read -r RAW_NAME
 
-# Check if a branch name was provided.
 if [ -z "$RAW_NAME" ]; then
     echo "❌ No branch name entered. Aborting."
     exit 1
@@ -59,18 +65,17 @@ echo ""
 echo "1. Switching to '$MAIN_BRANCH' branch..."
 git checkout $MAIN_BRANCH
 
-echo "2. Pulling the latest changes from the remote..."
+echo "2. Pulling the latest changes..."
 git pull origin $MAIN_BRANCH
 
-# Check if the pull was successful
 if [ $? -ne 0 ]; then
-    echo "❌ 'git pull' failed. Please resolve the issues before creating a new branch."
+    echo "❌ 'git pull' failed. Please resolve issues first."
     exit 1
 fi
 
 # --- Step 4: Creating the new branch ---
-echo "3. Creating and switching to new branch: '$BRANCH_NAME'..."
+echo "3. Creating and switching to: '$BRANCH_NAME'..."
 git checkout -b "$BRANCH_NAME"
 
 echo ""
-echo "✅ Done! You are now on branch '$BRANCH_NAME' and ready to start working."
+echo "✅ You are now on branch '$BRANCH_NAME'."
