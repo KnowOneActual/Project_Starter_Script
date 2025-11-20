@@ -1,15 +1,14 @@
 <p align="center">
 <img src="assets/img/Project_Starter_Script_blue_logo_v2.webp" alt="Project Starter Script Logo goes here" width="350">
 </p>
+<br>
 
-
-
-# Project Starter Script 🚀
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Yep-brightgreen.svg)
-/Users/userx/Downloads/Project_Starter_Script_logo.af
-/Users/userx/Downloads/Project_Starter_Script_blue_logo.webp
+<br>
+
+### Project Starter Script 🚀
 A friendly bash script to automate the setup of new projects for GitHub. This tool creates a clean directory structure, generates standard boilerplate files, and helps you push your new project to GitHub, all from your command line.
 
 Stop the repetitive busywork and start every new project with a consistent foundation.
