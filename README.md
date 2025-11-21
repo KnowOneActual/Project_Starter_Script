@@ -87,6 +87,6 @@ It will ask for a branch name, sync your `main` branch with the remote, and then
 
 ### License
 
-This project is licensed under the Unlicense License.
+This project is licensed under the MIT License.
 
-For more information, please refer to [Unlicense](https://unlicense.org)
+For more information, please refer to [MIT License](License)
