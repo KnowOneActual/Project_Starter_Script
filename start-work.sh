@@ -75,7 +75,14 @@ fi
 
 # --- Step 4: Creating the new branch ---
 echo "3. Creating and switching to: '$BRANCH_NAME'..."
-git checkout -b "$BRANCH_NAME"
 
-echo ""
-echo "✅ You are now on branch '$BRANCH_NAME'."
+# Attempt to create the branch and capture the success/failure
+if git checkout -b "$BRANCH_NAME"; then
+    echo ""
+    echo "✅ You are now on branch '$BRANCH_NAME'."
+else
+    echo ""
+    echo "❌ Failed to create branch '$BRANCH_NAME'."
+    echo "   (Please check for invalid characters or existing branches with similar names)"
+    exit 1
+fi
