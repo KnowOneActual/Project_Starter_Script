@@ -16,8 +16,6 @@ Stop the repetitive busywork and start every new project with a consistent found
 
 ### Features
 
-### Features
-
 * **Standard Directory Structure**: Creates a clean project layout with `src`, `docs`, and `tests` folders.
 * **Smart Language Setup**: Automatically detects and configures your environment:
     * **Python**: Creates a `.venv`, upgrades pip, and adds a `requirements.txt`.
@@ -71,19 +69,36 @@ The script will then guide you through the setup process, asking for the `.gitig
 
 ### Using the `start-work.sh` Script
 
-The `start-project.sh` script automatically includes a handy `start-work.sh` script (from the [start-work-script repository](https://github.com/KnowOneActual/start-work-script)) in your new project's root directory. This tool helps you quickly start a new task by automating the Git branching process.
+The `start-project.sh` script automatically includes a handy `start-work.sh` script in your new project's root directory. This tool helps you quickly start a new task by automating the Git branching process.
 
-1.  **Make it Executable** (This is done automatically by the main script)
-    ```bash
-    chmod +x start-work.sh
-    ```
-2.  **Run it**
-    When you're ready to start a new feature or fix, run the script from your project's root directory:
-    ```bash
-    ./start-work.sh
-    ```
+It comes with two modes: **Interactive** (menus) and **Fast-Track** (arguments).
 
-It will ask for a branch name, sync your `main` branch with the remote, and then create and switch to the new feature branch for you.
+#### Option 1: Interactive Mode
+
+Run the script without arguments to be guided through a menu:
+
+```bash
+./start-work.sh
+```
+
+  * **Prompts you** for the branch type (Feature, Bugfix, etc.) and name.
+  * **Auto-detects** your main branch to ensure you are syncing with the correct source.
+
+#### Option 2: Fast-Track Mode
+
+Skip the menus by passing the branch type and name directly:
+
+```bash
+# Syntax: ./start-work.sh [type] [name]
+
+./start-work.sh feature new-login-page
+# Result: switches to branch 'feature/new-login-page'
+```
+
+#### Smart Features
+
+  * **Auto-Sanitization**: Don't worry about formatting. If you type "Fix Login Bug", the script automatically converts it to `fix-login-bug`.
+  * **Safety Checks**: The script checks if your workspace is dirty or if the branch already exists before running commands, preventing accidental overwrites.
 
 ### License
 

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0]
+
+### Added
+- **start-work.sh**: Added support for command-line arguments (e.g., `./start-work.sh feature my-task`) to bypass interactive menus for faster usage.
+- **start-work.sh**: Added automatic input sanitization to prevent Git errors by converting spaces to hyphens and forcing lowercase branch names.
+- **start-work.sh**: Added a proactive check to detect if a target branch already exists locally, offering to switch to it safely instead of aborting.
+
+### Fixed
+- **start-work.sh**: Fixed a logic error where the script would incorrectly report "Success" even if the `git checkout` command failed due to invalid characters.
+
 ## [1.1.0]
 
 ### Added
