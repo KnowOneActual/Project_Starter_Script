@@ -1,6 +1,5 @@
 <div align="center">
 <img src="assets/img/Project_Starter_Script_blue_logo_v2.webp" alt="Project Starter Script Logo goes here" width="350">
-</div>
 <br>
 
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
