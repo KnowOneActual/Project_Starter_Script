@@ -5,8 +5,8 @@
 
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)
-![Maintained](https://img.shields.io/badge/Maintained%3F-Yep-brightgreen.svg)
 ![Lint Status](https://github.com/KnowOneActual/Project_Starter_Script/actions/workflows/lint.yml/badge.svg)
+![Maintained](https://img.shields.io/badge/Maintained%3F-Yep-brightgreen.svg)
 </div>
 <br>
 
@@ -22,6 +22,7 @@ Stop the repetitive busywork and start every new project with a consistent found
 * **Smart Language Setup**: Automatically detects and configures your environment:
     * **Python**: Creates a `.venv`, upgrades pip, and adds a `requirements.txt`.
     * **Node.js**: Initializes `package.json` and creates an `.nvmrc`.
+* **Input Auto-Correction**: Automatically fixes project names with spaces (e.g., "My New App" → `My-New-App`) so you don't have to worry about syntax errors.
 * **CI/CD Ready**: Installs a default GitHub Action (`ci.yml`) so your project is ready for automated testing immediately.
 * **Git & GitHub Automation**: Initializes Git, safeguards against dirty directories, and offers to create/push the repo to GitHub.
 * **Workflow Tools**: Includes a companion `start-work.sh` script for standardized branching (Feature/Bugfix/Hotfix).
@@ -36,7 +37,7 @@ Before you begin, make sure you have the following tools installed on your syste
 * **Git**: For version control.
 * **cURL**: To fetch boilerplate files from GitHub and APIs.
 * **GPG** (Optional): If you want to sign your commits.
-* **GitHub CLI (gh)** (Optional): For the automated repository creation feature. To use this feature, you only need to run `gh auth login` one time to authenticate.
+* **GitHub CLI (gh)** (Optional): For the automated repository creation feature. To use this feature, you must run `gh auth login` to authenticate.
 
 ```bash
 gh auth login
@@ -66,6 +67,8 @@ gh auth login
     ```bash
     ./start-project.sh my-new-app
     ```
+
+    *(Note: If you use spaces in the name, the script will automatically convert them to hyphens for you!)*
 
 The script will then guide you through the setup process, asking for the `.gitignore` preference and other details.
 
@@ -102,7 +105,7 @@ Skip the menus by passing the branch type and name directly:
   * **Auto-Sanitization**: Don't worry about formatting. If you type "Fix Login Bug", the script automatically converts it to `fix-login-bug`.
   * **Safety Checks**: The script checks if your workspace is dirty or if the branch already exists before running commands, preventing accidental overwrites.
 
-### License
+### https://www.google.com/search?q=License
 
 This project is licensed under the MIT License.
 

@@ -130,10 +130,12 @@ else
     read -rp "Enter your project name: " project_name
 fi
 
-# Validate input
+# Sanitize input (Auto-fix spaces instead of erroring)
 if [[ "$project_name" =~ [[:space:]] ]]; then
-    echo "❌ Error: Project names cannot contain spaces. Use hyphens or underscores."
-    exit 1
+    echo "⚠️  Project name contains spaces."
+    # Replace all spaces with hyphens
+    project_name="${project_name// /-}"
+    echo "   Auto-corrected to: $project_name"
 fi
 
 # 2. Create Project Directory
@@ -199,8 +201,7 @@ else
     echo "MIT License - see the LICENSE file for details." >> README.md
 fi
 
-echo "MIT License - see the LICENSE file for details." >> README.md
-
+# Create License
 {
     echo "MIT License"
     echo ""

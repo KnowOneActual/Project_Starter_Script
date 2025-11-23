@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - - **start-project.sh**: Added a validation step using `gh auth status` to ensure the user is actually logged into the GitHub CLI before attempting to create a repository.
 
 ### Fixed
+- **start-project.sh** fixed input error hanlding with the auto-fix logic.
 - **start-project.sh**: Fixed a critical issue where `curl` would silently fail on 404 errors. Added the `-f` flag to `download_file` to correctly catch and report errors.
 - **start-project.sh**: Refactored the GitHub push and `.gitignore` selection prompts to use `while` loops, preventing invalid input (like typos) from breaking the script flow.
 - **start-work.sh**: Fixed the "stash changes" prompt to use a loop, ensuring the script doesn't exit immediately if the user mistypes their choice.
