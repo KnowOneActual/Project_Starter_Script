@@ -243,27 +243,50 @@ echo "✅ Local project '$project_name' is ready!"
 echo "--------------------------------------------------"
 
 # 12. GitHub Push Guide
-read -p "Would you like to push this project to GitHub now? (y/n): " push_to_github
-if [[ "$push_to_github" =~ ^[Yy]$ ]]; then
-    if command -v gh &> /dev/null; then
-        echo "GitHub CLI detected."
-        read -p "Create a new public repository named '$project_name'? (y/n): " create_repo
-        if [[ "$create_repo" =~ ^[Yy]$ ]]; then
-            gh repo create "$project_name" --public --source=. --push
-            echo "🎉 All done! Your project is now on GitHub."
-        fi
-    else
-        echo "GitHub CLI not found. Continuing with manual setup."
-        echo ""
-        echo "Please go to https://github.com/new and create a new repository."
-        read -p "Once you have the repository URL, paste it here: " repo_url
-        if [ -n "$repo_url" ]; then
-            git remote add origin "$repo_url"
-            git push -u origin main
-            echo "🎉 All done! Your project is now on GitHub."
-        fi
-    fi
-fi
+while true; do
+    read -p "Would you like to push this project to GitHub now? (y/n): " push_to_github
+    case $push_to_github in
+        [Yy]* ) 
+            if command -v gh &> /dev/null; then
+                echo "GitHub CLI detected."
+                # Nested loop for the second prompt to be safe
+                while true; do
+                    read -p "Create a new public repository named '$project_name'? (y/n): " create_repo
+                    case $create_repo in
+                        [Yy]* )
+                            gh repo create "$project_name" --public --source=. --push
+                            echo "🎉 All done! Your project is now on GitHub."
+                            break
+                            ;;
+                        [Nn]* )
+                            echo "Skipping repo creation."
+                            break
+                            ;;
+                        * ) echo "❌ Please answer 'y' or 'n'." ;;
+                    esac
+                done
+            else
+                echo "GitHub CLI not found. Continuing with manual setup."
+                echo ""
+                echo "Please go to https://github.com/new and create a new repository."
+                read -p "Once you have the repository URL, paste it here: " repo_url
+                if [ -n "$repo_url" ]; then
+                    git remote add origin "$repo_url"
+                    git push -u origin main
+                    echo "🎉 All done! Your project is now on GitHub."
+                fi
+            fi
+            break 
+            ;;
+        [Nn]* ) 
+            echo "Skipping GitHub setup."
+            break 
+            ;;
+        * ) 
+            echo "❌ Invalid input. Please answer 'y' or 'n'." 
+            ;;
+    esac
+done
 
 echo "=================================================="
 echo "Happy coding!"
