@@ -32,7 +32,12 @@ download_file() {
     local url=$1
     local output=$2
     echo "   Downloading $output..."
-    curl -sL "$url" -o "$output"
+    # FIX: Added -f to fail on HTTP errors and || to catch the failure
+    curl -sLf "$url" -o "$output" || {
+        echo "❌ Error: Failed to download $output."
+        echo "   (URL: $url)"
+        return 1
+    }
 }
 
 setup_language_env() {
@@ -69,34 +74,45 @@ create_gitignore_and_env() {
     echo "Select a .gitignore option:"
     echo "  1) Use my standard boilerplate (from gitignore-boilerplate repo)"
     echo "  2) Fetch a language-specific .gitignore from an API"
-    read -p "Enter your choice (1 or 2): " gitignore_choice
-
-    if [ "$gitignore_choice" == "1" ]; then
-        echo "🔽 Downloading your standard .gitignore boilerplate..."
-        if download_file "https://raw.githubusercontent.com/KnowOneActual/gitignore-boilerplate/main/.gitignore" ".gitignore"; then
-            echo "✅ Custom .gitignore created successfully."
-        else
-            echo "⚠️  Warning: Could not fetch your custom .gitignore. A blank file was created."
-            touch .gitignore
-        fi
-    else
-        read -p "Enter the primary language (e.g., python, node, go): " lang
-        echo "Creating a .gitignore for $lang via API..."
-        if download_file "https://www.toptal.com/developers/gitignore/api/$lang" ".gitignore"; then
-            if grep -q "ERROR:" ".gitignore"; then
-                 echo "⚠️  Warning: The API does not have a template for '$lang'. A blank file was created."
-                 > .gitignore
-            else
-                 echo "✅ .gitignore for $lang created successfully."
-            fi
-        else
-            echo "⚠️  Warning: Could not fetch .gitignore from API. A blank file was created."
-            touch .gitignore
-        fi
-        
-        # Run the environment setup based on the language chosen
-        setup_language_env "$lang"
-    fi
+    
+    # FIX: Loop to ensure valid input
+    while true; do
+        read -p "Enter your choice (1 or 2): " gitignore_choice
+        case $gitignore_choice in
+            1)
+                echo "🔽 Downloading your standard .gitignore boilerplate..."
+                if download_file "https://raw.githubusercontent.com/KnowOneActual/gitignore-boilerplate/main/.gitignore" ".gitignore"; then
+                    echo "✅ Custom .gitignore created successfully."
+                else
+                    echo "⚠️  Warning: Could not fetch your custom .gitignore. A blank file was created."
+                    touch .gitignore
+                fi
+                break
+                ;;
+            2)
+                read -p "Enter the primary language (e.g., python, node, go): " lang
+                echo "Creating a .gitignore for $lang via API..."
+                if download_file "https://www.toptal.com/developers/gitignore/api/$lang" ".gitignore"; then
+                    if grep -q "ERROR:" ".gitignore"; then
+                         echo "⚠️  Warning: The API does not have a template for '$lang'. A blank file was created."
+                         > .gitignore
+                    else
+                         echo "✅ .gitignore for $lang created successfully."
+                    fi
+                else
+                    echo "⚠️  Warning: Could not fetch .gitignore from API. A blank file was created."
+                    touch .gitignore
+                fi
+                
+                # Run the environment setup based on the language chosen
+                setup_language_env "$lang"
+                break
+                ;;
+            *)
+                echo "❌ Invalid choice. Please enter 1 or 2."
+                ;;
+        esac
+    done
 }
 
 # --- Main Script ---
@@ -209,7 +225,6 @@ download_file "$TEMPLATE_URL/ci.yml" ".github/workflows/ci.yml"
 
 # 8. Download Supporting Scripts
 echo "🔽 Downloading start-work.sh..."
-# Note: Ensure you update the start-work-script repo with the new auto-detect logic
 download_file "https://raw.githubusercontent.com/KnowOneActual/start-work-script/main/start-work.sh" "start-work.sh"
 chmod +x start-work.sh
 
@@ -247,9 +262,9 @@ while true; do
     read -p "Would you like to push this project to GitHub now? (y/n): " push_to_github
     case $push_to_github in
         [Yy]* ) 
-            if command -v gh &> /dev/null; then
-                echo "GitHub CLI detected."
-                # Nested loop for the second prompt to be safe
+            # FIX: Check if GH CLI is installed AND if the user is logged in
+            if command -v gh &> /dev/null && gh auth status &>/dev/null; then
+                echo "GitHub CLI detected and authenticated."
                 while true; do
                     read -p "Create a new public repository named '$project_name'? (y/n): " create_repo
                     case $create_repo in
@@ -266,7 +281,13 @@ while true; do
                     esac
                 done
             else
-                echo "GitHub CLI not found. Continuing with manual setup."
+                # Fallback to manual mode if CLI is missing or not logged in
+                if command -v gh &> /dev/null; then
+                    echo "⚠️  GitHub CLI detected but not logged in."
+                else
+                    echo "GitHub CLI not found."
+                fi
+                echo "Continuing with manual setup."
                 echo ""
                 echo "Please go to https://github.com/new and create a new repository."
                 read -p "Once you have the repository URL, paste it here: " repo_url
