@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0]
+
+### Added
+- **start-project.sh**: Added a validation step using `gh auth status` to ensure the user is actually logged into the GitHub CLI before attempting to create a repository.
+
+### Fixed
+- **start-project.sh**: Fixed a critical issue where `curl` would silently fail on 404 errors. Added the `-f` flag to `download_file` so the script correctly reports an error instead of saving a broken file.
+- **start-project.sh**: Fixed input handling for the `.gitignore` selection and GitHub push prompts. These now use `while` loops to trap invalid input (like typos) and ask again, rather than crashing or defaulting incorrectly.
+
 ## [1.2.0]
 
 ### Added
