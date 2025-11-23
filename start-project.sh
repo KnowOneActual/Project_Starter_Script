@@ -172,7 +172,8 @@ touch docs/index.md
 
 # 5. Download Boilerplate Files
 echo "🔽 Downloading boilerplate files..."
-BASE_URL="https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main"
+# FIX: Allow overriding BASE_URL for forks
+: "${BASE_URL:=https://raw.githubusercontent.com/KnowOneActual/Project_Starter_Script/main}"
 TEMPLATE_URL="$BASE_URL/templates"
 
 # Configs (from root)

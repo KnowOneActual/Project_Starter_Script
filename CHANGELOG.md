@@ -8,11 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0]
 
 ### Added
-- **start-project.sh**: Added a validation step using `gh auth status` to ensure the user is actually logged into the GitHub CLI before attempting to create a repository.
+- **Workflows**: Added `.github/workflows/lint.yml` to automatically lint Bash scripts with ShellCheck on every push.
+- **start-project.sh**: Added a `gh auth status` check to verify authentication before attempting to create a GitHub repository.
+- **start-project.sh**: Added support for overriding the `BASE_URL` environment variable, making it easier for forks to test changes using their own templates.
+- - **start-project.sh**: Added a validation step using `gh auth status` to ensure the user is actually logged into the GitHub CLI before attempting to create a repository.
 
 ### Fixed
-- **start-project.sh**: Fixed a critical issue where `curl` would silently fail on 404 errors. Added the `-f` flag to `download_file` so the script correctly reports an error instead of saving a broken file.
-- **start-project.sh**: Fixed input handling for the `.gitignore` selection and GitHub push prompts. These now use `while` loops to trap invalid input (like typos) and ask again, rather than crashing or defaulting incorrectly.
+- **start-project.sh**: Fixed a critical issue where `curl` would silently fail on 404 errors. Added the `-f` flag to `download_file` to correctly catch and report errors.
+- **start-project.sh**: Refactored the GitHub push and `.gitignore` selection prompts to use `while` loops, preventing invalid input (like typos) from breaking the script flow.
+- **start-work.sh**: Fixed the "stash changes" prompt to use a loop, ensuring the script doesn't exit immediately if the user mistypes their choice.
+
 
 ## [1.2.0]
 

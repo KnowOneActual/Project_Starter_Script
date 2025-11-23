@@ -26,14 +26,22 @@ echo "🔄 Target Main Branch: $MAIN_BRANCH"
 echo "Checking workspace status..."
 if [ -n "$(git status --porcelain)" ]; then
     echo "⚠️  Your working directory is not clean."
-    read -p "Would you like to stash these changes and continue? (y/n): " stash_choice
-    if [[ "$stash_choice" =~ ^[Yy]$ ]]; then
-        git stash push -m "Auto-stashed by start-work.sh"
-        echo "📦 Changes stashed."
-    else
-        echo "❌ Please commit or stash your changes manually."
-        exit 1
-    fi
+    # FIX: Loop to handle typos safely
+    while true; do
+        read -p "Would you like to stash these changes and continue? (y/n): " stash_choice
+        case $stash_choice in
+            [Yy]* )
+                git stash push -m "Auto-stashed by start-work.sh"
+                echo "📦 Changes stashed."
+                break
+                ;;
+            [Nn]* )
+                echo "❌ Please commit or stash your changes manually."
+                exit 1
+                ;;
+            * ) echo "❌ Please answer 'y' or 'n'." ;;
+        esac
+    done
 else
     echo "✅ Workspace is clean."
 fi
