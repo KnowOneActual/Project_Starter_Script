@@ -186,7 +186,19 @@ download_file "$TEMPLATE_URL/CONTRIBUTING.md" "CONTRIBUTING.md"
 download_file "$TEMPLATE_URL/CHANGELOG.md" "CHANGELOG.md"
 
 # 6. Create README and LICENSE
-echo "# $project_name" > README.md
+echo "📝 Generating README and LICENSE..."
+
+# Download the rich template instead of writing a basic file
+if download_file "$TEMPLATE_URL/README.md" "README.md"; then
+    # Use sed to replace the placeholder header with the actual project name
+    # (compatible with both GNU and BSD sed for macOS/Linux)
+    sed -i.bak "s/# Project Name/# $project_name/" README.md && rm README.md.bak
+else
+    # Fallback if download fails
+    echo "# $project_name" > README.md
+    echo "MIT License - see the LICENSE file for details." >> README.md
+fi
+
 echo "MIT License - see the LICENSE file for details." >> README.md
 
 {

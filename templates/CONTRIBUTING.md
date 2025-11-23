@@ -31,6 +31,14 @@ Have an idea for a new feature or improvement?
 5.  **Test Your Changes**: Ensure everything runs as expected.
 6.  **Push and PR**: Push your branch to your fork and open a Pull Request against the `main` branch.
 
+### Bash Scripting
+
+We aim for clean, safe, and portable Bash code.
+
+  * **Linting**: This project uses a CI workflow to strictly enforce [ShellCheck](https://www.shellcheck.net/).
+  * **Requirement**: All Pull Requests must pass the linting workflow before they can be merged. We recommend running `shellcheck` locally before pushing.
+  * **Indentation**: Use 4 spaces for indentation.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the project's license.

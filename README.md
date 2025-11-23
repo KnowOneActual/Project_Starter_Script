@@ -1,11 +1,13 @@
-<p align="center">
+<div align="center">
 <img src="assets/img/Project_Starter_Script_blue_logo_v2.webp" alt="Project Starter Script Logo goes here" width="350">
-</p>
+</div>
 <br>
 
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Yep-brightgreen.svg)
+![Lint Status](https://github.com/KnowOneActual/Project_Starter_Script/actions/workflows/lint.yml/badge.svg)
+</div>
 <br>
 
 ### Project Starter Script 🚀
