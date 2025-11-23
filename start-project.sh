@@ -75,9 +75,8 @@ create_gitignore_and_env() {
     echo "  1) Use my standard boilerplate (from gitignore-boilerplate repo)"
     echo "  2) Fetch a language-specific .gitignore from an API"
     
-    # FIX: Loop to ensure valid input
     while true; do
-        read -p "Enter your choice (1 or 2): " gitignore_choice
+        read -rp "Enter your choice (1 or 2): " gitignore_choice
         case $gitignore_choice in
             1)
                 echo "🔽 Downloading your standard .gitignore boilerplate..."
@@ -90,12 +89,13 @@ create_gitignore_and_env() {
                 break
                 ;;
             2)
-                read -p "Enter the primary language (e.g., python, node, go): " lang
+                read -rp "Enter the primary language (e.g., python, node, go): " lang
                 echo "Creating a .gitignore for $lang via API..."
                 if download_file "https://www.toptal.com/developers/gitignore/api/$lang" ".gitignore"; then
                     if grep -q "ERROR:" ".gitignore"; then
                          echo "⚠️  Warning: The API does not have a template for '$lang'. A blank file was created."
-                         > .gitignore
+                         # FIX: explicit no-op command for redirection
+                         : > .gitignore
                     else
                          echo "✅ .gitignore for $lang created successfully."
                     fi
@@ -127,7 +127,7 @@ if [ -n "$1" ]; then
     project_name="$1"
     echo "Targeting project: $project_name"
 else
-    read -p "Enter your project name: " project_name
+    read -rp "Enter your project name: " project_name
 fi
 
 # Validate input
@@ -139,7 +139,7 @@ fi
 # 2. Create Project Directory
 if [ -d "$project_name" ]; then
     echo "❌ Error: Directory '$project_name' already exists."
-    read -p "Do you want to overwrite it? (DANGEROUS - existing files may be lost) (y/n): " confirm_overwrite
+    read -rp "Do you want to overwrite it? (DANGEROUS - existing files may be lost) (y/n): " confirm_overwrite
     if [[ "$confirm_overwrite" != "y" ]]; then
         echo "Aborting."
         exit 1
@@ -236,13 +236,13 @@ create_gitignore_and_env
 
 # 10. GPG Signing
 commit_flags="-m 'Initial commit: project structure setup'"
-read -p "Sign this commit with a GPG key? (y/n): " use_gpg
+read -rp "Sign this commit with a GPG key? (y/n): " use_gpg
 if [[ "$use_gpg" =~ ^[Yy]$ ]]; then
     signing_key=$(git config user.signingkey)
     if [ -z "$signing_key" ]; then
         echo "No default GPG key found in your Git config."
         gpg --list-secret-keys --keyid-format LONG
-        read -p "Please enter the GPG key ID you want to use: " gpg_key_id
+        read -rp "Please enter the GPG key ID you want to use: " gpg_key_id
         git config user.signingkey "$gpg_key_id"
     fi
     commit_flags="-S $commit_flags"
@@ -260,14 +260,13 @@ echo "--------------------------------------------------"
 
 # 12. GitHub Push Guide
 while true; do
-    read -p "Would you like to push this project to GitHub now? (y/n): " push_to_github
+    read -rp "Would you like to push this project to GitHub now? (y/n): " push_to_github
     case $push_to_github in
         [Yy]* ) 
-            # FIX: Check if GH CLI is installed AND if the user is logged in
             if command -v gh &> /dev/null && gh auth status &>/dev/null; then
                 echo "GitHub CLI detected and authenticated."
                 while true; do
-                    read -p "Create a new public repository named '$project_name'? (y/n): " create_repo
+                    read -rp "Create a new public repository named '$project_name'? (y/n): " create_repo
                     case $create_repo in
                         [Yy]* )
                             gh repo create "$project_name" --public --source=. --push
@@ -282,7 +281,6 @@ while true; do
                     esac
                 done
             else
-                # Fallback to manual mode if CLI is missing or not logged in
                 if command -v gh &> /dev/null; then
                     echo "⚠️  GitHub CLI detected but not logged in."
                 else
@@ -291,7 +289,7 @@ while true; do
                 echo "Continuing with manual setup."
                 echo ""
                 echo "Please go to https://github.com/new and create a new repository."
-                read -p "Once you have the repository URL, paste it here: " repo_url
+                read -rp "Once you have the repository URL, paste it here: " repo_url
                 if [ -n "$repo_url" ]; then
                     git remote add origin "$repo_url"
                     git push -u origin main

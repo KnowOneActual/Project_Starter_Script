@@ -26,9 +26,8 @@ echo "🔄 Target Main Branch: $MAIN_BRANCH"
 echo "Checking workspace status..."
 if [ -n "$(git status --porcelain)" ]; then
     echo "⚠️  Your working directory is not clean."
-    # FIX: Loop to handle typos safely
     while true; do
-        read -p "Would you like to stash these changes and continue? (y/n): " stash_choice
+        read -rp "Would you like to stash these changes and continue? (y/n): " stash_choice
         case $stash_choice in
             [Yy]* )
                 git stash push -m "Auto-stashed by start-work.sh"
@@ -65,7 +64,7 @@ else
     echo "  2) bugfix/   (Bug fixes)"
     echo "  3) hotfix/   (Urgent production fixes)"
     echo "  4) custom    (No prefix)"
-    read -p "Choose (1-4): " type_choice
+    read -rp "Choose (1-4): " type_choice
 fi
 
 case $type_choice in
@@ -97,12 +96,12 @@ echo ""
 
 # --- Step 3: Syncing the main branch ---
 echo "1. Switching to '$MAIN_BRANCH' branch..."
-git checkout $MAIN_BRANCH
+# FIX: Quote the variable to prevent word splitting
+git checkout "$MAIN_BRANCH"
 
 echo "2. Pulling the latest changes..."
-git pull origin $MAIN_BRANCH
-
-if [ $? -ne 0 ]; then
+# FIX: Check exit code directly and quote variable
+if ! git pull origin "$MAIN_BRANCH"; then
     echo "❌ 'git pull' failed. Please resolve issues first."
     exit 1
 fi
@@ -113,7 +112,7 @@ echo "3. Preparing branch: '$BRANCH_NAME'..."
 # Check if branch already exists locally
 if git show-ref --verify --quiet "refs/heads/$BRANCH_NAME"; then
     echo "⚠️  Branch '$BRANCH_NAME' already exists locally."
-    read -p "Switch to it instead? (y/n): " switch_choice
+    read -rp "Switch to it instead? (y/n): " switch_choice
     if [[ "$switch_choice" =~ ^[Yy]$ ]]; then
         git checkout "$BRANCH_NAME"
         echo ""
