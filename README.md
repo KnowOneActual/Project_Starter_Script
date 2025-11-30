@@ -12,7 +12,7 @@
 </div>
 <br>
 
-## ✨ **New AI-Enhanced Features (v2.0)**
+## ✨ **New Enhanced Features (v2.0)**
 
 - **🐌 `--dry-run`** Preview all actions without executing
 - **⏳ Progress Spinners** Visual feedback during downloads/git ops
@@ -127,5 +127,4 @@ See [CHANGELOG.md](CHANGELOG.md) for v1.1.0 → v2.0 upgrades.
 
 <div align="center">
 **MIT License** - [LICENSE](LICENSE)<br>
-⭐ Love it? Star the repo! 🚀
 </div>
