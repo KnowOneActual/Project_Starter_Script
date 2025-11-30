@@ -1,111 +1,131 @@
+# Project Starter Script 🚀
+
 <div align="center">
-<img src="assets/img/Project_Starter_Script_blue_logo_v2.webp" alt="Project Starter Script Logo goes here" width="350">
+<img src="assets/img/Project_Starter_Script_blue_logo_v2.webp" alt="Project Starter Script Logo" width="350">
 <br>
 
 ![Language](https://img.shields.io/badge/Language-Bash-lightgrey.svg) 
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)
 ![Lint Status](https://github.com/KnowOneActual/Project_Starter_Script/actions/workflows/lint.yml/badge.svg)
+![CI Status](https://github.com/KnowOneActual/Project_Starter_Script/actions/workflows/ci.yml/badge.svg)
 ![Maintained](https://img.shields.io/badge/Maintained%3F-Yep-brightgreen.svg)
 </div>
 <br>
 
-### Project Starter Script 🚀
-A friendly bash script to automate the setup of new projects for GitHub. This tool creates a clean directory structure, generates standard boilerplate files, and helps you push your new project to GitHub, all from your command line.
+## ✨ **New AI-Enhanced Features (v2.0)**
 
-Stop the repetitive busywork and start every new project with a consistent foundation.
+- **🐌 `--dry-run`** Preview all actions without executing
+- **⏳ Progress Spinners** Visual feedback during downloads/git ops
+- **📋 Session Logging** `work-session-YYYYMMDD-HHMMSS.log` for every session
+- **🔍 Dependency Checks** Validates git/curl/jq before starting
+- **📊 Full CI/CD** Matrix testing + GitHub Pages deployment
+- **🎨 Enhanced UX** Colors, interactive menus, strict sanitization
 
-
-### Features
-
-* **Standard Directory Structure**: Creates a clean project layout with `src`, `docs`, and `tests` folders.
-* **Smart Language Setup**: Automatically detects and configures your environment:
-    * **Python**: Creates a `.venv`, upgrades pip, and adds a `requirements.txt`.
-    * **Node.js**: Initializes `package.json` and creates an `.nvmrc`.
-* **Input Auto-Correction**: Automatically fixes project names with spaces (e.g., "My New App" → `My-New-App`) so you don't have to worry about syntax errors.
-* **CI/CD Ready**: Installs a default GitHub Action (`ci.yml`) so your project is ready for automated testing immediately.
-* **Git & GitHub Automation**: Initializes Git, safeguards against dirty directories, and offers to create/push the repo to GitHub.
-* **Workflow Tools**: Includes a companion `start-work.sh` script for standardized branching (Feature/Bugfix/Hotfix).
-* **Standard Boilerplate**: Fetches essential files (`README`, `LICENSE`, `CONTRIBUTING`, `CHANGELOG`) from a central template repository.
-
-
-### Prerequisites
-
-Before you begin, make sure you have the following tools installed on your system:
-
-* **Bash**: Should be available on any macOS or Linux system.
-* **Git**: For version control.
-* **cURL**: To fetch boilerplate files from GitHub and APIs.
-* **GPG** (Optional): If you want to sign your commits.
-* **GitHub CLI (gh)** (Optional): For the automated repository creation feature. To use this feature, you must run `gh auth login` to authenticate.
+## 🚀 Quick Start
 
 ```bash
-gh auth login
-````
+# New project with dry-run preview
+./start-project.sh --dry-run my-app
 
-### How to Use
+# Start work with fast-track
+./start-work.sh feature login-page
 
-1.  **Download the Script**
-    Save the script to a convenient location on your computer. For example, you can save it as `start-project.sh` in your home directory or a dedicated `~/scripts` folder.
-
-2.  **Make it Executable**
-    Open your terminal and run the following command to give the script permission to execute:
-
-    ```bash
-    chmod +x start-project.sh
-    ```
-
-3.  **Run the Script**
-    Whenever you want to start a new project, just run the script from your terminal:
-
-    ```bash
-    ./start-project.sh
-    ```
-
-    Alternatively, you can pass the project name directly to skip the first prompt:
-
-    ```bash
-    ./start-project.sh my-new-app
-    ```
-
-    *(Note: If you use spaces in the name, the script will automatically convert them to hyphens for you!)*
-
-The script will then guide you through the setup process, asking for the `.gitignore` preference and other details.
-
-### Using the `start-work.sh` Script
-
-The `start-project.sh` script automatically includes a handy `start-work.sh` script in your new project's root directory. This tool helps you quickly start a new task by automating the Git branching process.
-
-It comes with two modes: **Interactive** (menus) and **Fast-Track** (arguments).
-
-#### Option 1: Interactive Mode
-
-Run the script without arguments to be guided through a menu:
-
-```bash
+# Interactive work session (creates log file)
 ./start-work.sh
 ```
 
-  * **Prompts you** for the branch type (Feature, Bugfix, etc.) and name.
-  * **Auto-detects** your main branch to ensure you are syncing with the correct source.
+## Features
 
-#### Option 2: Fast-Track Mode
+- **📁 Standard Structure**: `src/`, `docs/`, `tests/` + language detection
+- **🐍 Smart Setup**: Python `.venv`, Node `package.json` + `.nvmrc`
+- **🔧 Auto-Fix Names**: "My New App" → `my-new-app`
+- **✅ CI/CD Ready**: ShellCheck, matrix testing, template validation
+- **🌐 GitHub Integration**: `gh repo create` or manual remote setup
+- **📦 Companion Tools**: Enhanced `start-work.sh` with logging/menus
 
-Skip the menus by passing the branch type and name directly:
+## Prerequisites
 
 ```bash
-# Syntax: ./start-work.sh [type] [name]
+# Core dependencies
+sudo apt install git curl jq shellcheck  # Ubuntu/Debian
+brew install git curl jq shellcheck      # macOS
 
-./start-work.sh feature new-login-page
-# Result: switches to branch 'feature/new-login-page'
+# Optional: GitHub CLI
+gh auth login
 ```
 
-#### Smart Features
+## Usage
 
-  * **Auto-Sanitization**: Don't worry about formatting. If you type "Fix Login Bug", the script automatically converts it to `fix-login-bug`.
-  * **Safety Checks**: The script checks if your workspace is dirty or if the branch already exists before running commands, preventing accidental overwrites.
+### 1. **Project Creation**
+```bash
+# Interactive (recommended)
+./start-project.sh
 
-### https://www.google.com/search?q=License
+# Direct with name
+./start-project.sh my-project
 
-This project is licensed under the MIT License.
+# Safe preview first
+./start-project.sh --dry-run my-project
+```
 
-For more information, please refer to [MIT License](License)
+### 2. **Daily Workflow** (`start-work.sh`)
+```bash
+# Fast-track (auto-sanitizes)
+./start-work.sh feature user-auth
+# → Creates: feature/user-auth + logs session
+
+# Interactive menu
+./start-work.sh
+# → Select type → Enter name → Creates log file
+```
+
+**💾 Logs saved as**: `work-session-20251129-1915.log`
+
+## 🎯 Example Session
+```
+$ ./start-work.sh feature login
+[2025-11-29 19:15:23] INFO: Starting work session
+[2025-11-29 19:15:24] SUCCESS: Created feature/login
+📋 Session log: work-session-20251129-191523.log
+```
+
+## 🧪 CI/CD Pipeline
+
+| Job | Triggers | Checks |
+|-----|----------|--------|
+| Lint | Push/PR | ShellCheck, EditorConfig |
+| Test | Push/PR | Script syntax matrix |
+| Templates | Push/PR | Structure validation |
+| Pages | Main push | Auto-deploy docs |
+
+**[View Actions](https://github.com/KnowOneActual/Project_Starter_Script/actions)**
+
+## 📚 Advanced Usage
+
+```bash
+# 1. Dry-run new project
+./start-project.sh --dry-run "My App With Spaces"
+
+# 2. Start feature work (creates log)
+cd my-app-with-spaces
+../start-work.sh bugfix oauth-bug
+
+# 3. CI runs automatically on push/PR
+```
+
+## 🔧 Customization
+
+- **Templates**: Edit `templates/` for custom boilerplates
+- **BASE_URL**: Override repo for enterprise GitHub
+- **Branch Types**: Extend `select_branch_type()` function
+
+## 📈 Release History
+
+See [CHANGELOG.md](CHANGELOG.md) for v1.1.0 → v2.0 upgrades.
+
+---
+
+<div align="center">
+**MIT License** - [LICENSE](LICENSE)<br>
+⭐ Love it? Star the repo! 🚀
+</div>

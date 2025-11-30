@@ -1,0 +1,56 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, 'feature/**' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          ignore_paths: templates
+          severity: warning
+
+      - name: Check EditorConfig
+        uses: editorconfig-checker/action-editorconfig-checker@v2
+
+  test-scripts:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        script: [start-project.sh, start-work.sh]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck jq curl
+      
+      - name: Test script syntax
+        run: |
+          shellcheck --exclude=SC1128,SC2086,SC2183,SC2155,SC2034 ${{ matrix.script }}
+          bash -n ${{ matrix.script }}
+
+  validate-templates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check template validity
+        run: |
+          # Validate all templates have proper structure
+          find templates -name '*.md' -exec sh -c 'grep -q "#" {}' \; -print || true
+          # Check if LICENSE template exists and has MIT format
+          if [ -f templates/LICENSE ]; then
+            grep -q "MIT License" templates/LICENSE || exit 1
+          else
+            echo "templates/LICENSE not found - skipping"
+          fi

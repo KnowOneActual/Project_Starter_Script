@@ -1,136 +1,90 @@
 #!/bin/bash
+set -euo pipefail
 
-# --- Git Workflow Starter ---
-# 1. Checks for uncommitted changes.
-# 2. Asks for (or accepts) a branch type and name.
-# 3. Syncs the main branch (Auto-detected).
-# 4. Creates and switches to the new branch.
+# =================================================================================
+# Git Workflow Starter 🚀 v2.0 - Clean & Reliable
+# =================================================================================
 
-# --- Argument Parsing ---
-# Allow passing arguments directly: ./start-work.sh [type] [name]
-ARG_TYPE=$1
-ARG_NAME=$2
-
-# --- Step 0: Auto-detect Main Branch ---
-# Attempts to find the default branch name (main, master, etc.)
-MAIN_BRANCH=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | cut -d' ' -f5)
-
-# Fallback if offline or detection fails
-if [ -z "$MAIN_BRANCH" ]; then
-    MAIN_BRANCH="main"
+# Colors (TTY only)
+if [[ -t 1 ]]; then
+    RED=$'\033[0;31m'; GREEN=$'\033[0;32m'; YELLOW=$'\033[1;33m'
+    BLUE=$'\033[0;34m'; PURPLE=$'\033[0;35m'; NC=$'\033[0m'
+else
+    RED=''; GREEN=''; YELLOW=''; BLUE=''; PURPLE=''; NC=''
 fi
 
-echo "🔄 Target Main Branch: $MAIN_BRANCH"
-
-# --- Step 1: Check for a clean working directory ---
-echo "Checking workspace status..."
-if [ -n "$(git status --porcelain)" ]; then
-    echo "⚠️  Your working directory is not clean."
-    while true; do
-        read -rp "Would you like to stash these changes and continue? (y/n): " stash_choice
-        case $stash_choice in
-            [Yy]* )
-                git stash push -m "Auto-stashed by start-work.sh"
-                echo "📦 Changes stashed."
-                break
-                ;;
-            [Nn]* )
-                echo "❌ Please commit or stash your changes manually."
-                exit 1
-                ;;
-            * ) echo "❌ Please answer 'y' or 'n'." ;;
-        esac
+spinner() {
+    local pid="$1"
+    local spinstr='⠏⠇⠧⠦⠴⠼⠸⠹'
+    local i=0
+    while kill -0 "$pid" 2>/dev/null; do
+        i=$(((i + 1) % 8))
+        printf '\r%s %sWaiting...%s' "${spinstr:i:1}" "${PURPLE}" "${NC}"
+        sleep 0.1
     done
-else
-    echo "✅ Workspace is clean."
-fi
-echo ""
+    printf '\r\033[K\n'
+}
 
-# --- Step 2: Get the new branch name ---
+log_info()    { printf '%s%s%s\n' "${BLUE}" "$1" "${NC}"; }
+log_success() { printf '%s%s%s\n' "${GREEN}" "$1" "${NC}"; }
+log_warn()    { printf '%s%s%s\n' "${YELLOW}" "$1" "${NC}"; }
 
-# Logic to handle Branch Type (Argument vs Menu)
-if [ -n "$ARG_TYPE" ]; then
-    # Map text arguments to numbers for the case statement
-    case $ARG_TYPE in
-        feature|feat) type_choice=1 ;;
-        bugfix|fix|bug) type_choice=2 ;;
-        hotfix) type_choice=3 ;;
-        *) type_choice=4 ;; # Default to custom if unknown
-    esac
-    echo "🚀 Fast-track mode: creating '$ARG_TYPE' branch."
-else
-    echo "Select the type of branch:"
-    echo "  1) feature/  (New features)"
-    echo "  2) bugfix/   (Bug fixes)"
-    echo "  3) hotfix/   (Urgent production fixes)"
-    echo "  4) custom    (No prefix)"
-    read -rp "Choose (1-4): " type_choice
-fi
+printf '\n%s=== START-WORK ===%s\n' "${GREEN}" "${NC}"
 
-case $type_choice in
-    1) prefix="feature/" ;;
-    2) prefix="bugfix/" ;;
-    3) prefix="hotfix/" ;;
-    *) prefix="" ;;
-esac
-
-# Logic to handle Branch Name (Argument vs Prompt)
-if [ -n "$ARG_NAME" ]; then
-    RAW_NAME="$ARG_NAME"
-else
-    echo "Enter the name for your new branch (e.g., add-user-login):"
-    read -r RAW_NAME
-fi
-
-# Sanitize: lowercase and replace spaces with hyphens
-CLEAN_NAME=$(echo "$RAW_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
-
-if [ -z "$CLEAN_NAME" ]; then
-    echo "❌ No branch name entered. Aborting."
-    exit 1
-fi
-
-BRANCH_NAME="${prefix}${CLEAN_NAME}"
-echo "Target Branch: $BRANCH_NAME"
-echo ""
-
-# --- Step 3: Syncing the main branch ---
-echo "1. Switching to '$MAIN_BRANCH' branch..."
-# FIX: Quote the variable to prevent word splitting
-git checkout "$MAIN_BRANCH"
-
-echo "2. Pulling the latest changes..."
-# FIX: Check exit code directly and quote variable
-if ! git pull origin "$MAIN_BRANCH"; then
-    echo "❌ 'git pull' failed. Please resolve issues first."
-    exit 1
-fi
-
-# --- Step 4: Creating (or Switching to) the branch ---
-echo "3. Preparing branch: '$BRANCH_NAME'..."
-
-# Check if branch already exists locally
-if git show-ref --verify --quiet "refs/heads/$BRANCH_NAME"; then
-    echo "⚠️  Branch '$BRANCH_NAME' already exists locally."
-    read -rp "Switch to it instead? (y/n): " switch_choice
-    if [[ "$switch_choice" =~ ^[Yy]$ ]]; then
-        git checkout "$BRANCH_NAME"
-        echo ""
-        echo "✅ Switched to existing branch '$BRANCH_NAME'."
-        exit 0
+# 1. Stash check
+if git status --porcelain | grep -q .; then
+    printf '%sUncommitted changes detected%s\n' "${YELLOW}" "${NC}"
+    printf '%sStash and continue? (y/n): %s' "${YELLOW}" "${NC}"
+    read -r choice
+    if [[ "$choice" =~ ^[Yy]$ ]]; then
+        git stash push -m "Auto-stash by start-work.sh" &
+        spinner "$!"
+        log_success "Changes stashed ✓"
     else
-        echo "❌ Aborting to prevent overwriting work."
+        log_warn "Please commit/stash manually"
         exit 1
     fi
 fi
 
-# Attempt to create the branch and capture the success/failure
-if git checkout -b "$BRANCH_NAME"; then
-    echo ""
-    echo "✅ You are now on branch '$BRANCH_NAME'."
-else
-    echo ""
-    echo "❌ Failed to create branch '$BRANCH_NAME'."
-    echo "   (Please check for invalid characters or existing branches with similar names)"
-    exit 1
+# 2. Branch type (simple numbered menu)
+printf '\n%sSelect branch type:%s\n' "${BLUE}" "${NC}"
+echo "1) feature/  2) bugfix/  3) hotfix/  4) none"
+printf '%sPick (1-4): %s' "${BLUE}" "${NC}"
+read -r pick
+case "$pick" in
+    1|feature|feat) PREFIX="feature/";;
+    2|bugfix|fix|bug) PREFIX="bugfix/";;
+    3|hotfix) PREFIX="hotfix/";;
+    *) PREFIX="";;
+esac
+
+# 3. Branch name
+printf '\n%sBranch name: %s' "${BLUE}" "${NC}"
+read -r name
+CLEAN_NAME=$(echo "$name" | tr '[:upper:]' '[:lower:]' | tr -s ' ' '-' | sed 's/[^a-z0-9-]//g' | sed 's/^-*//;s/-*$//')
+
+if [[ -z "$CLEAN_NAME" ]]; then
+    log_warn "Invalid name, using 'work'"
+    CLEAN_NAME="work"
 fi
+
+BRANCH="${PREFIX}${CLEAN_NAME}"
+log_info "Creating/switching to: $BRANCH"
+
+# 4. Git sync & branch
+git fetch origin
+MAIN_BRANCH=$(git remote show origin 2>/dev/null | grep 'HEAD branch' | cut -d' ' -f5 || echo "main")
+
+log_info "Syncing $MAIN_BRANCH..."
+git checkout "$MAIN_BRANCH"
+git pull origin "$MAIN_BRANCH"
+
+if git rev-parse --verify "$BRANCH" >/dev/null 2>&1; then
+    log_info "Branch exists, switching..."
+    git checkout "$BRANCH"
+else
+    log_success "Creating new branch: $BRANCH"
+    git checkout -b "$BRANCH" "$MAIN_BRANCH"
+fi
+
+log_success "✅ Ready on branch: $BRANCH"
