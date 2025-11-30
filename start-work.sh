@@ -55,8 +55,7 @@ spinner() {
         printf '\r%s %s%s%s ' "${spinstr:${i}:1}" "${PURPLE}Waiting...${NC}"
         sleep 0.1
     done
-    printf '\r\033[K'
-}
+    printf '\r\033
 
 # Auto-detect main branch with fallback
 get_main_branch() {

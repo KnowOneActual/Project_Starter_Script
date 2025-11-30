@@ -26,11 +26,10 @@ spinner() {
     local i=0
     while kill -0 "${pid}" 2>/dev/null; do
         i=$(((i + 1) % 8))
-        printf '\r%s %s%s%s ' "${spinstr:${i}:1}" "${BLUE}[PROCESSING]${NC}"
+        printf '\r%s %s%s%s ' "${spinstr:${i}:1}" "${PURPLE}Waiting...${NC}"
         sleep 0.1
     done
-    printf '\r\033[K'
-}
+    printf '\r\033
 
 # Enhanced download with progress and validation
 download_file() {
@@ -72,14 +71,18 @@ check_dependencies() {
     command -v git >/dev/null 2>&1 || missing+=("git")
     command -v curl >/dev/null 2>&1 || missing+=("curl")
     command -v jq >/dev/null 2>&1 || missing+=("jq")
-    
+
     if [[ ${#missing[@]} -ne 0 ]]; then
         printf '%s❌ Missing dependencies:%s %s\n' "${RED}" "${NC}" "${missing[*]}"
-        printf 'Install with: brew install %s (macOS) or apt install %s (Linux)\n' "${missing[*]}" "${missing[*]}"
+        printf 'Install with:\n'
+        printf '  macOS: brew install %s\n' "${missing[@]}"
+        printf '  Linux: sudo apt install %s\n' "${missing[@]}"
         exit 1
     fi
+
     printf '%s✅ All dependencies present%s\n' "${GREEN}" "${NC}"
 }
+
 
 usage() {
     printf 'Usage: %s [-d|--dry-run] [project_name]\n' "${0}"
