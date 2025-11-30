@@ -125,6 +125,4 @@ See [CHANGELOG.md](CHANGELOG.md) for v1.1.0 → v2.0 upgrades.
 
 ---
 
-<div align="center">
-**MIT License** - [LICENSE](LICENSE)<br>
-</div>
+**MIT License** - [LICENSE](LICENSE)
