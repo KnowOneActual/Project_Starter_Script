@@ -6,7 +6,6 @@ set -euo pipefail
 # =================================================================================
 
 # Colors (satisfy ShellCheck SC2034)
-readonly RED=$'\033[0;31m'
 readonly GREEN=$'\033[0;32m'
 readonly YELLOW=$'\033[1;33m'
 readonly BLUE=$'\033[0;34m'
