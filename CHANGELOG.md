@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+### Added
+- Full `ROADMAP.md` with phased development plan
+- VS Code integration roadmap
+
+## [v2.0.0] - 2025-11-29
+### Added
+- 🚀 **`start-project.sh`** - Complete project scaffolding
+  - `src/`, `tests/`, `docs/` structure
+  - README, CHANGELOG, CONTRIBUTING, LICENSE
+  - GitHub templates (ISSUE_TEMPLATE, PR_TEMPLATE)
+  - Language-specific `.gitignore` + setup (Python/Node/Go)
+  - Initial git commit + `gh repo create`
+- ✨ **`start-work.sh`** - Git workflow automation
+  - Auto-stash uncommitted changes w/ spinner
+  - Numbered branch type menu (feature/bugfix/hotfix)
+  - Smart branch name cleaning (`super-cool-thing`)
+  - Sync main → create/switch branch
+- 🎨 **Production UX**
+  - Spinners, colors, clear `>>>` prompts
+  - No stalls, no invisible prompts
+  - Cross-platform color detection
+
+### Fixed
+- 🔧 **ShellCheck 100% clean** (SC2034, SC2183, syntax)
+- 🐛 Branch name sanitization (no trailing `-`)
+- 🐛 Spinner line artifacts (`\r\033[K`)
+- 🐛 Prompt visibility (newlines + `>>>` prefixes)
+
+### CI/CD
+- ✅ GitHub Actions w/ dual ShellCheck (2.0.0 + master)
+- ✅ Linux/macOS compatibility checks
+
+## [v1.0.0] - 2025-11-?? *(Estimated)*
+### Added
+- Initial `start-project.sh` prototype
+- Basic templates + git init
+
+*Full history available in git log.*
+
+
 ## [1.3.0]
 
 ### Added
@@ -60,3 +108,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **start-project.sh**: Fixed a syntax error in the `.prettierignore` download command.
 - **.prettierrc**: Resolved merge conflicts and restored valid JSON formatting.
+
+
+***
+
+**Built with ❤️ by debugging real-world UX issues:**
+- Invisible prompts
+- Spinner artifacts  
+- Branch name sanitization
+- ShellCheck compliance
+- Cross-platform colors
