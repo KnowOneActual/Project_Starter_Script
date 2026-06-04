@@ -260,8 +260,28 @@ read -rp "Push to GitHub now? (y/n): " push_choice
 if [[ "$push_choice" == "y" ]]; then
     if command -v gh >/dev/null 2>&1; then
         if [[ "$DRY_RUN" != "true" ]]; then
-            gh repo create "$PROJECT_NAME" --public --source=. --push
-            printf '%s🎉 Live on GitHub!%s\n' "$GREEN" "$NC"
+            # Clear GITHUB_TOKEN if it is set so gh CLI can fall back to keyring/config
+            if [[ -n "$GITHUB_TOKEN" ]]; then
+                printf '%sℹ️  Unsetting invalid/active GITHUB_TOKEN to use keyring credentials...%s\n' "$YELLOW" "$NC"
+                unset GITHUB_TOKEN
+            fi
+
+            # Verify authentication status
+            if ! gh auth status >/dev/null 2>&1; then
+                printf '%s⚠️  Not authenticated with GitHub CLI (gh) or bad credentials.%s\n' "$YELLOW" "$NC"
+                read -rp "Would you like to run 'gh auth login' now? (y/n): " login_choice
+                if [[ "$login_choice" == "y" ]]; then
+                    gh auth login
+                fi
+            fi
+
+            # Check again after potential login
+            if gh auth status >/dev/null 2>&1; then
+                gh repo create "$PROJECT_NAME" --public --source=. --push
+                printf '%s🎉 Live on GitHub!%s\n' "$GREEN" "$NC"
+            else
+                printf '%s❌ Skipping GitHub repository creation (not authenticated).%s\n' "$RED" "$NC"
+            fi
         else
             printf '   %s[DRY-RUN]%s Would run gh repo create ... --push\n' "$YELLOW" "$NC"
         fi

@@ -5,17 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
 ### Added
 - Full `ROADMAP.md` with phased development plan
 - VS Code integration roadmap
+
+## [v2.0.1] - 2026-06-04
+
+### Added
+- Pre-flight GitHub CLI authentication check using `gh auth status` in `start-project.sh`.
+- Automatic unsetting of invalid/active `GITHUB_TOKEN` within the script, allowing `gh` to seamlessly fall back to your system's stored keyring credentials.
+- Interactive prompt to log in via `gh auth login` if credentials are still missing or invalid.
+
+### Fixed
+- Prevented script from crashing abruptly on repository creation when GitHub credentials are bad or rate limits are exceeded.
 
 ## [v2.0.0] - 2025-11-29
 ### Added
